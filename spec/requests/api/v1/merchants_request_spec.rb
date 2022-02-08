@@ -10,13 +10,13 @@ RSpec.describe "Merchant API" do
 
     merchants = JSON.parse(response.body)
 
-    expect(merchants.count).to eq(10)
+    expect(merchants["data"].count).to eq(10)
 
     merchants.each do |merchant|
-      expect(merchant).to have_key("id")
-      expect(merchant["id"]).to be_an(Integer)
-      expect(merchant).to have_key("name")
-      expect(merchant["name"]).to be_a(String)
+      expect(merchant.last[0]["attributes"]).to have_key("id")
+      expect(merchant.last[0]["attributes"]["id"]).to be_an(Integer)
+      expect(merchant.last[0]["attributes"]).to have_key("name")
+      expect(merchant.last[0]["attributes"]["name"]).to be_a(String)
     end
   end
 end
