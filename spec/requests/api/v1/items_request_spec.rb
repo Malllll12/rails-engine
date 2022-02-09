@@ -40,7 +40,6 @@ RSpec.describe "Item API" do
     item = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
-    # binding.pry
 
     expect(item[:data][:attributes]).to have_key(:id)
     expect(item[:data][:attributes][:id]).to eq(id)
@@ -54,5 +53,5 @@ RSpec.describe "Item API" do
     expect(item[:data][:attributes]).to have_key(:unit_price)
     expect(item[:data][:attributes][:unit_price]).to be_a(Float)
   end
-
+  
 end
