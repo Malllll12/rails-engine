@@ -53,5 +53,22 @@ RSpec.describe "Item API" do
     expect(item[:data][:attributes]).to have_key(:unit_price)
     expect(item[:data][:attributes][:unit_price]).to be_a(Float)
   end
-  
+
+  it 'creates an item' do
+    merchant = create(:merchant)
+    item_params = ({
+                    name: "Audrey 2",
+                    description: "carnivorous",
+                    unit_price: 100.99,
+                    merchant_id: merchant.id
+                  })
+    post api_v1_items_path(params: item_params)
+
+    expect(Item.last.name).to eq("Audrey 2")
+    expect(Item.last.description).to eq("carnivorous")
+    expect(Item.last.unit_price).to eq(100.99)
+  end
+
+  it 'deletes an item' do
+  end
 end
