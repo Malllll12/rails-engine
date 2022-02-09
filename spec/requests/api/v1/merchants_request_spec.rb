@@ -8,15 +8,14 @@ RSpec.describe "Merchant API" do
 
     expect(response).to be_successful
 
-    merchants = JSON.parse(response.body, symbolize_names: true)
+    parsed = JSON.parse(response.body, symbolize_names: true)
+    merchants = parsed[:data]
 
-    expect(merchants[:data].count).to eq(10)
+    expect(merchants.count).to eq(10)
 
     merchants.each do |merchant|
-      expect(merchant.last[0][:attributes]).to have_key(:id)
-      expect(merchant.last[0][:attributes][:id]).to be_an(Integer)
-      expect(merchant.last[0][:attributes]).to have_key(:name)
-      expect(merchant.last[0][:attributes][:name]).to be_a(String)
+      expect(merchant[:attributes]).to have_key(:name)
+      expect(merchant[:attributes][:name]).to be_a(String)
     end
   end
 
@@ -25,15 +24,13 @@ RSpec.describe "Merchant API" do
 
     get api_v1_merchant_path(id)
 
-    merchant = JSON.parse(response.body, symbolize_names: true)
+    parsed = JSON.parse(response.body, symbolize_names: true)
+    merchant = parsed[:data]
 
     expect(response).to be_successful
 
-    expect(merchant[:data][:attributes]).to have_key(:id)
-    expect(merchant[:data][:attributes][:id]).to eq(id)
-
-    expect(merchant[:data][:attributes]).to have_key(:name)
-    expect(merchant[:data][:attributes][:name]).to be_a(String)
+    expect(merchant[:attributes]).to have_key(:name)
+    expect(merchant[:attributes][:name]).to be_a(String)
   end
 
   it 'gets a merchants items' do
@@ -42,21 +39,20 @@ RSpec.describe "Merchant API" do
 
     get api_v1_merchant_items_path(merchant.id)
 
-    merchant_items = JSON.parse(response.body, symbolize_names: true)
+    parsed = JSON.parse(response.body, symbolize_names: true)
+    merchant_items = parsed[:data]
+
     expect(response).to be_successful
 
     merchant_items.each do |item|
-      expect(item[1][1][:attributes]).to have_key(:id)
-      expect(item[1][1][:attributes][:id]).to be_an(Integer)
+      expect(item[:attributes]).to have_key(:name)
+      expect(item[:attributes][:name]).to be_a(String)
 
-      expect(item[1][1][:attributes]).to have_key(:name)
-      expect(item[1][1][:attributes][:name]).to be_a(String)
+      expect(item[:attributes]).to have_key(:description)
+      expect(item[:attributes][:description]).to be_a(String)
 
-      expect(item[1][1][:attributes]).to have_key(:description)
-      expect(item[1][1][:attributes][:description]).to be_a(String)
-
-      expect(item[1][1][:attributes]).to have_key(:unit_price)
-      expect(item[1][1][:attributes][:unit_price]).to be_a(Float)
+      expect(item[:attributes]).to have_key(:unit_price)
+      expect(item[:attributes][:unit_price]).to be_a(Float)
     end
   end
 end
