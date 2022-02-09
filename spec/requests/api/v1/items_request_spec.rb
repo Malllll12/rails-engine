@@ -62,7 +62,7 @@ RSpec.describe "Item API" do
                     unit_price: 100.99,
                     merchant_id: merchant.id
                   })
-    post api_v1_items_path(params: item_params)
+    post api_v1_items_path, params: item_params
 
     expect(Item.last.name).to eq("Audrey 2")
     expect(Item.last.description).to eq("carnivorous")
@@ -70,5 +70,11 @@ RSpec.describe "Item API" do
   end
 
   it 'deletes an item' do
+    merchant = Merchant.create!(name: "Guy in an oversized overcoat")
+    item = merchant.items.create!(name: "Cool thing", description: "Not at all suspicious", unit_price: 3.0)
+    delete api_v1_item_path(item.id)
+
+    expect(response.status).to eq(204)
+    expect(response.body).to be_empty
   end
 end
