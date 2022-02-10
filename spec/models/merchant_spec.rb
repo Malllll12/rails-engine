@@ -15,9 +15,9 @@ RSpec.describe Merchant do
     end
 
     it 'finds all merchants matching name' do
-      merchant_1 = Merchant.create!(name: "Lil Shop of Horrors")
-      merchant_2 = Merchant.create!(name: "Horrors and Oddities")
-      merchant_3 = Merchant.create!(name: "Ruff Crowd Pet Supplies")
+      merchant_1 = create(:merchant, name: "Lil Shop of Horrors")
+      merchant_2 = create(:merchant, name: "Horrors and Oddities")
+      merchant_3 = create(:merchant, name: "Ruff Crowd Pet Supplies")
 
       expect(Merchant.find_all_name("horror")).to eq([merchant_2, merchant_1])
       expect(Merchant.find_all_name("horror")).to_not eq(merchant_3)
