@@ -60,6 +60,7 @@ RSpec.describe "Item API" do
     post api_v1_items_path, params: item_params
 
     expect(response.status).to eq(201)
+
     expect(Item.last.name).to eq("Audrey 2")
     expect(Item.last.description).to eq("carnivorous")
     expect(Item.last.unit_price).to eq(100.99)
@@ -68,9 +69,15 @@ RSpec.describe "Item API" do
   it 'updates an item' do
     merchant = create(:merchant)
     item = merchant.items.create!(name: "Cool thing", description: "Not at all suspicious", unit_price: 3.0)
+    item_params = {
+                    name: "Coolest thing",
+                    description: "very suspiciously cool",
+                  }
+    patch api_v1_item_path(item.id), params: item_params
 
-
-
+    expect(Item.last.name).to eq("Coolest thing")
+    expect(Item.last.description).to eq("very suspiciously cool")
+    expect(Item.last.unit_price).to eq(3.0)
   end
 
   it 'deletes an item' do
