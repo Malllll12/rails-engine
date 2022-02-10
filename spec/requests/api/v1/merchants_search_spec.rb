@@ -18,18 +18,37 @@ RSpec.describe "Merchant Search" do
     expect(merchants.last[:attributes][:name]).to eq(merchant_1.name)
   end
 
-    xit 'finds a single merchant by search term' do
-      merchant_1 = Merchant.create!(name: "Lil Shop of Horrors")
-      merchant_2 = Merchant.create!(name: "Horrors and Oddities")
-      merchant_3 = Merchant.create!(name: "Ruff Crowd Pet Supplies")
+  it 'finds a single merchant by search term' do
+    merchant_1 = Merchant.create!(name: "Lil Shop of Horrors")
+    merchant_2 = Merchant.create!(name: "Horrors and Oddities")
+    merchant_3 = Merchant.create!(name: "Ruff Crowd Pet Supplies")
 
-      get "/api/v1/merchants/find?name=horror"
+    get "/api/v1/merchants/find?name=horror"
 
-      expect(response).to be_successful
-      parsed = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    parsed = JSON.parse(response.body, symbolize_names: true)
+    merchant = parsed[:data]
 
-      binding.pry
-      # expect(parsed[:data][:attributes][:name]).to eq(merchant_1.name)
-    end
+    expect(merchant[:attributes][:name]).to eq(merchant_2.name)
+  end
 
+  it 'returns 400 if no input is given' do
+    merchant_1 = Merchant.create!(name: "Lil Shop of Horrors")
+    merchant_2 = Merchant.create!(name: "Horrors and Oddities")
+    merchant_3 = Merchant.create!(name: "Ruff Crowd Pet Supplies")
+
+    get "/api/v1/merchants/find?name="
+
+    expect(response.status).to eq(400)
+  end
+
+  it 'returns 404 if bad input is given' do
+    merchant_1 = Merchant.create!(name: "Lil Shop of Horrors")
+    merchant_2 = Merchant.create!(name: "Horrors and Oddities")
+    merchant_3 = Merchant.create!(name: "Ruff Crowd Pet Supplies")
+
+    get "/api/v1/merchants/find?name=12345"
+
+    expect(response.status).to eq(404)
+  end
 end
