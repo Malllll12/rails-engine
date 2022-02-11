@@ -6,7 +6,7 @@ class Api::V1::MerchantsSearchController < ApplicationController
     elsif Merchant.find_name(params[:name]).nil?
       render json: { data: []}, status: 404
     else
-    render json: MerchantSerializer.new(Merchant.find_all_name(params[:name]))
+      render json: MerchantSerializer.new(Merchant.find_all_name(params[:name]))
     end
   end
 
