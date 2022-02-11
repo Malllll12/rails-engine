@@ -13,6 +13,16 @@ RSpec.describe Merchant do
       expect(Merchant.find_name("horrors")).to_not eq(merchant_1)
       expect(Merchant.find_name("horrors")).to_not eq(merchant_3)
     end
+    
+    it 'finds merchant by partial name' do
+      merchant_1 = Merchant.create!(name: "Lil Shop of Horrors")
+      merchant_2 = Merchant.create!(name: "Horrors and Oddities")
+      merchant_3 = Merchant.create!(name: "Ruff Crowd Pet Supplies")
+
+      expect(Merchant.find_name("hoRr")).to eq(merchant_2)
+      expect(Merchant.find_name("hoRr")).to_not eq(merchant_1)
+      expect(Merchant.find_name("hoRr")).to_not eq(merchant_3)
+    end
 
     it 'finds all merchants matching name' do
       merchant_1 = create(:merchant, name: "Lil Shop of Horrors")
