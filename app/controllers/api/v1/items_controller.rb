@@ -8,17 +8,21 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def create
-    render json: ItemSerializer.new(Item.create(item_params)), status: 201
+    item = Item.new(item_params)
+    if item.valid? == true
+      render json: ItemSerializer.new(Item.create(item_params)), status: 201
+    else
+      render json: { error: "Item cannot be created. Please check your input."}, status: 404
+    end
   end
 
   def update
-    render json: ItemSerializer.new(Item.update(params[:id], item_params))
-    # item = Item.update(params[:id], item_params)
-    # if item.save
-    #   render json: ItemSerializer.new, status: 200
-    # else
-    #   render json: { error: "Item cannot be updated. Please check your input."}, status: 400
-    # end
+    item = Item.find(params[:id])
+    if item.update(item_params)
+      render json: ItemSerializer.new(item), status: 200
+    else
+      render json: { error: "Item cannot be updated. Please check your input."}, status: 400
+    end
   end
 
   def destroy
