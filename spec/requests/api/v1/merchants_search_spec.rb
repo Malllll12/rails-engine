@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Merchant Search" do
 
-  it 'finds all merchant matching search term' do
+  it 'finds all merchants matching search term' do
     merchant_1 = Merchant.create!(name: "Lil Shop of Horrors")
     merchant_2 = Merchant.create!(name: "Horrors and Oddities")
     merchant_3 = Merchant.create!(name: "Ruff Crowd Pet Supplies")
@@ -16,6 +16,26 @@ RSpec.describe "Merchant Search" do
 
     expect(merchants.first[:attributes][:name]).to eq(merchant_2.name)
     expect(merchants.last[:attributes][:name]).to eq(merchant_1.name)
+  end
+
+  it 'fails to find all merchant matching search term' do
+    merchant_1 = Merchant.create!(name: "Lil Shop of Horrors")
+    merchant_2 = Merchant.create!(name: "Horrors and Oddities")
+    merchant_3 = Merchant.create!(name: "Ruff Crowd Pet Supplies")
+
+    get "/api/v1/merchants/find_all?name="
+
+    expect(response.status).to eq(400)
+  end
+
+  it 'fails to find all merchant matching search term' do
+    merchant_1 = Merchant.create!(name: "Lil Shop of Horrors")
+    merchant_2 = Merchant.create!(name: "Horrors and Oddities")
+    merchant_3 = Merchant.create!(name: "Ruff Crowd Pet Supplies")
+
+    get "/api/v1/merchants/find_all?name=12235"
+
+    expect(response.status).to eq(404)
   end
 
   it 'finds a single merchant by search term' do
