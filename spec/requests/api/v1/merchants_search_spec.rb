@@ -16,6 +16,7 @@ RSpec.describe "Merchant Search" do
 
     expect(merchants.first[:attributes][:name]).to eq(merchant_2.name)
     expect(merchants.last[:attributes][:name]).to eq(merchant_1.name)
+    expect(merchants).to be_an(Array)
   end
 
   it 'fails to find all merchant matching search term' do
@@ -25,7 +26,11 @@ RSpec.describe "Merchant Search" do
 
     get "/api/v1/merchants/find_all?name="
 
+    parsed = JSON.parse(response.body, symbolize_names: true)
+    merchants = parsed[:data]
+
     expect(response.status).to eq(400)
+    expect(merchants).to be_an(Array)
   end
 
   it 'fails to find all merchant matching search term' do
@@ -35,7 +40,11 @@ RSpec.describe "Merchant Search" do
 
     get "/api/v1/merchants/find_all?name=12235"
 
+    parsed = JSON.parse(response.body, symbolize_names: true)
+    merchants = parsed[:data]
+    
     expect(response.status).to eq(404)
+    expect(merchants).to be_an(Array)
   end
 
   it 'finds a single merchant by search term' do

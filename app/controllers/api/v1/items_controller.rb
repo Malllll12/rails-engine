@@ -12,7 +12,7 @@ class Api::V1::ItemsController < ApplicationController
     if item.valid? == true
       render json: ItemSerializer.new(Item.create(item_params)), status: 201
     else
-      render json: { error: "Item cannot be created. Please check your input."}, status: 404
+      render json: { data: "Item cannot be created. Please check your input."}, status: 404
     end
   end
 
@@ -21,7 +21,7 @@ class Api::V1::ItemsController < ApplicationController
     if item.update(item_params)
       render json: ItemSerializer.new(item), status: 200
     else
-      render json: { error: "Item cannot be updated. Please check your input."}, status: 400
+      render json: { data: "Item cannot be updated. Please check your input."}, status: 400
     end
   end
 
