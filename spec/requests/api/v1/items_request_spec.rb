@@ -32,7 +32,7 @@ RSpec.describe "Item API" do
   it 'gets an item' do
     merchant = create(:merchant)
     item = create(:item, merchant: merchant)
-  
+
     get api_v1_item_path(item.id)
 
     parsed = JSON.parse(response.body, symbolize_names: true)
@@ -66,6 +66,19 @@ RSpec.describe "Item API" do
     expect(Item.last.unit_price).to eq(100.99)
   end
 
+  it 'fails to create an item if given improper data' do
+    merchant = create(:merchant)
+    item_params = {
+                    name: "Audrey 2",
+                    description: "carnivorous",
+                    unit_price: 100.99,
+                    merchant_id: nil
+                  }
+    post api_v1_items_path, params: item_params
+
+    expect(response.status).to eq(404)
+  end
+
   it 'updates an item' do
     merchant = create(:merchant)
     item = create(:item, merchant: merchant)
@@ -79,6 +92,20 @@ RSpec.describe "Item API" do
     expect(Item.last.name).to eq("Coolest thing")
     expect(Item.last.description).to eq("very suspiciously cool")
     expect(Item.last.unit_price).to be_a(Float)
+  end
+
+  it 'fails to update an item if given bad information' do
+    merchant = create(:merchant)
+    item = create(:item, merchant: merchant)
+    item_params = {
+                    name: "Coolest thing",
+                    description: "very suspiciously cool",
+                    merchant_id: nil
+                  }
+
+    patch api_v1_item_path(item.id), params: item_params
+
+    expect(response.status).to eq(400)
   end
 
   it 'deletes an item' do
